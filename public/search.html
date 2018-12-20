@@ -1,0 +1,30 @@
+<div class="container">
+	<h1>Find your favourite movie!</h1>
+	<div class="searchPanel">
+		<form ng-submit="done()">
+            <input class="form-control" type="text" ng.model="search" id="searchInputField" placeholder="Search for movie" require autofocus>
+            <input class="btn btn-default" type="submit" id="searchButton" value="Take me there!">
+        </form>		
+    </div>
+    
+    <h1>Your personal ToWatchList</h1>
+    <div class="towatchPanel">
+        <div style="border: 2px solid black">
+            <div ng-repeat="movie in movies" ng-click="redirect(movie)">
+                <span><a href="">{{movie.name}}</a></span>
+            </div>
+        </div>
+
+    </div>
+
+    <h1>Lacking inspiration? Top rated movies last month</h1>
+    <div class="towatchPanel">
+        <div style="border: 2px solid black">
+            <div ng-repeat="movie in movies" ng-click="redirect(movie)">
+                <span><a href="">{{movie.name}}</a></span>
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,20 @@
+
+
+
+
+
+
+Fungerar det för mig och Viktor att redovisa de två sista labbarna + projektet för dig 7/12?
+
+Sedan får du här också vår kravspecifikation för projektet. Bifogat finner du ett ER-diagram 
+som beskriver vår databasstruktur.
+
+Vi vill skapa en filmportal där man loggar in på sitt konto m.h.a. lösenord, vi måste alltså 
+lära oss hur man hanterar inlogg. Inne på sajten, som i stort liknar IMDB, ska man kunna söka 
+efter filmer (hämtas ur en databas), och få information kring avg rating och sajter som streamar 
+filmen. En användare ska kunna ratea och påverka avg ratingen. En användare ska också kunna 
+spara en film till sin privata "movieToWatch"-lista, som displayas på användarens hem-sida. På 
+hem-sidan avser vi även att visa användaren vilka filmer som har blivit toprateade under den 
+senaste perioden (typ senaste månaden).
+
+Kom gärna med feedback och hör av dig om datumet inte skulle fungera.
