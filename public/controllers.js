@@ -9,6 +9,7 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
         if (response === "Success"){
           console.log('Rätt lösen och user');
           //$cookies.put('cookie', $scope.username);
+          Cookies.set("UserCookie", $scope.username, {expires : 7});
           $location.path('home');
         } else {
           alert("Login failed you stupid!");
@@ -22,10 +23,7 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
 
 fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location', 'UserService',
   function($scope, http, $location, user) {
-    $scope.username = 'Axel';
-    //console.log($cookies.get('cookie'));
-    http.post('/home', {username: $scope.username}, function(data){
-      // console.log('Hej');
+    http.post('/home', {username: Cookies.get("UserCookie")}, function(data){
       console.log(data);
     })
   }

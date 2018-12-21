@@ -26,7 +26,6 @@ router.post('/login', function(req, res){
 
 router.post('/home', function(req, res){
   model.fetchWatchlist(req.body.username, function(data){
-    console.log(data);
     res.json(data);
   });
 })
