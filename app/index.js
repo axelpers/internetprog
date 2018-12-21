@@ -38,19 +38,6 @@ model.checkDB();
 model.createTables();
 
 
-setTimeout(function(){
-  model.fetchWatchlist('Axel');
-},500);
-
-setTimeout(function(){
-  model.addToWatchlist('Axel', 'Kung Fu Panda');
-},500);
-
-setTimeout(function(){
-  model.fetchWatchlist('Axel');
-},5000);
-
-
 
 httpServer.listen(port, function () {
   console.log("server listening on port", port);

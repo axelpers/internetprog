@@ -7,6 +7,7 @@
 		<link rel="stylesheet/less" type="text/css" href="main.less">
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-cookies.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -33,7 +34,7 @@
 				<div class="collapse navbar-collapse" id="navbar-brand-centered">
 					<ul class="nav navbar-nav">
 						<li ng-click="redirect('login')" ng-class="location == '/login' ? 'active' : ''" id="indexQueuesBtn"><a style="cursor: pointer;">Login</a></li>
-						<li ng-click="redirect('search')" ng-class="location == '/search' ? 'active' : ''" id="indexSearchBtn"><a style="cursor: pointer;">Search(removethisl8er)</a></li>
+						<li ng-click="redirect('home')" ng-class="location == '/home' ? 'active' : ''" id="indexHomeBtn"><a style="cursor: pointer;">Home(removethisl8er)</a></li>
 						<li ng-click="redirect('list')" ng-class="location == '/list' || location.match('/room/.*') ? 'active' : ''" id="indexAdminBtn"><a style="cursor: pointer;">Rooms(removethisl8er)</a></li>
 					</ul>
 				</div><!-- /.navbar-collapse -->

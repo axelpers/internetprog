@@ -12,9 +12,9 @@
         templateUrl: 'list.html',
         controller: 'listController'
       }).
-      when('/search', {
-        templateUrl: 'search.html',
-        controller: 'searchController'
+      when('/home', {
+        templateUrl: 'home.html',
+        controller: 'homeController'
       }).
       when('/login', {
         templateUrl: 'login.html',

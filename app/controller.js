@@ -7,10 +7,8 @@ var model = require("./model.js");
 
 
 router.post('/login', function(req, res){
-  // We are using the callback function
-
+  // We are using a callback function
   model.checkLogin(req.body.username, function(data){
-    console.log(data);
     if (data != 'User not found'){
       var pw = data[0].password;
       if(pw.lenght === 0){
@@ -21,10 +19,16 @@ router.post('/login', function(req, res){
         res.json('Failed');
       }
     } else {
-      console.log('User not found');
       res.json('Failed');
     }
   })
 });
+
+router.post('/home', function(req, res){
+  model.fetchWatchlist(req.body.username, function(data){
+    console.log(data);
+    res.json(data);
+  });
+})
 
 module.exports = router;

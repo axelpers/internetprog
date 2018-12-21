@@ -43,12 +43,11 @@ exports.checkLogin = function(username, callback){
     });
 }
 
-exports.fetchWatchlist = function(username){
+exports.fetchWatchlist = function(username, callback){
   db.query("SELECT * FROM movies WHERE title IN (SELECT title FROM watchlists WHERE username = :username)",
   {replacements: { username: username}, type: db.QueryTypes.SELECT })
   .then(watchlist => {
-    console.log('fetchWatchlist: ', watchlist);
-    //return watchlist;
+    callback(watchlist);
   })
 }
 
