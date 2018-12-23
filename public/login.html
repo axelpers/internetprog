@@ -2,10 +2,11 @@
 
 <div class="text-box col-md-4 col-md-offset-4" style="text-align: center">
 	<h1>Login or create user account</h1>
-	<form ng-submit="done()">
+	
+	<form>
 		<input class="form-control" type="text" ng-model="username" id="usernameInputField" autocomplete="off" placeholder="Username" required autofocus>
 		<input class="form-control" type="password" ng-model="password" id="passwordInputField" placeholder="Password" require autofocus>
-		<input class="btn btn-default" type="submit" id="loginOKBtn" value="Login">	
+		<input class="btn btn-default" ng-click="login()" autocomplete="off" id="loginOKBtn" value="Login">	
 		<input class="btn btn-default" ng-click="createAccount()" autocomplete="off" id="createAccountBtn" value="Create Account">
 	</form>
 

@@ -4,7 +4,7 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
   function($scope, http, $location, user) {
     $scope.username = "";
     $scope.password = "";
-    $scope.done = function() {
+    $scope.login = function() {
       http.post('login', {newAccount: "False", username: $scope.username, password: $scope.password}, function(response) {
         if (response === "Success"){
           console.log('Rätt lösen och user');
