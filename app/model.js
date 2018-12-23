@@ -31,7 +31,7 @@ exports.checkLogin = function(username, callback){
   db.query("SELECT username FROM users WHERE username = :username", // nu är det case sensitive, det kanske vi kan ordna (setta alla till lowercase i DB och lowercasea all input)
   {replacements: { username: username}, type: db.QueryTypes.SELECT })
   .then(user => {
-    if(user[0].username === username){
+    if(user[0].username.toLowerCase() === username.toLowerCase()){
       db.query("SELECT password FROM users WHERE username = :username",
         {replacements: { username: username}, type: db.QueryTypes.SELECT })
         .then(data =>{
@@ -97,18 +97,20 @@ exports.createTables = function (){
     title: {type: Sequelize.STRING},
     genre: {type: Sequelize.STRING},
     year: {type: Sequelize.INTEGER},
-    streamedBy: {type: Sequelize.STRING}
+    streamedBy: {type: Sequelize.STRING},
+    avg_rating: {type: Sequelize.DOUBLE},
+    num_of_ratings: {type: Sequelize.INTEGER}
   });
   // Fill movie table
   // force: true will drop the table if it already exists
   Movies.sync({force: true}).then(() => {
     return Movies.bulkCreate([
-      {title: 'Nightcrawler', genre: 'Thriller', year: '2014',streamedBy: 'Netflix'},
-      {title: 'Kung Fu Panda', genre: 'Barn', year: '2008',streamedBy: 'CMORE'},
-      {title: 'Wall Street', genre: 'Drama', year: '1987',streamedBy: 'None'},
-      {title: 'The Town', genre: 'Crime', year: '2010',streamedBy: 'Netflix'},
-      {title: 'Trettioåriga kriget', genre: 'Historia', year: '2018',streamedBy: 'SVT Play'},
-      {title: 'They Shall Not Grow Old', genre: 'Historia', year: '2018',streamedBy: 'None'}
+      {title: 'Nightcrawler', genre: 'Thriller', year: 2014, streamedBy: 'Netflix', avg_rating: 4.4, num_of_ratings: 18 },
+      {title: 'Kung Fu Panda', genre: 'Barn', year: 2008, streamedBy: 'CMORE', avg_rating: 3.6, num_of_ratings: 30 },
+      {title: 'Wall Street', genre: 'Drama', year: 1987, streamedBy: 'None', avg_rating: 4.7, num_of_ratings: 46 },
+      {title: 'The Town', genre: 'Crime', year: 2010, streamedBy: 'Netflix', avg_rating: 4.0, num_of_ratings: 8 },
+      {title: 'Trettioåriga kriget', genre: 'Historia', year: 2018, streamedBy: 'SVT Play', avg_rating: 3.2, num_of_ratings: 3 },
+      {title: 'They Shall Not Grow Old', genre: 'Historia', year: 2018, streamedBy: 'None', avg_rating: 4.5, num_of_ratings: 22 }
     ]);
   });
   // Create user table
