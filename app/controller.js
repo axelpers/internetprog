@@ -7,11 +7,15 @@ var model = require("./model.js");
 
 
 router.post('/login', function(req, res){
-  // We are using a callback function
   if(req.body.newAccount === "True"){
-    //ska ny user
-    console.log("Skapa ny user med Username: ", req.body.username, "och lösen: ", req.body.password);
-    // ...write to DB
+    if ((req.body.username === "")||(req.body.password === "")){
+      res.json("noDetails");
+    } else {
+      //ska ny user
+      console.log("Skapar ny user.... Username: ", req.body.username, "och lösen: ", req.body.password);
+      // ...write to DB
+      res.json('Success')
+    }
   } else if(req.body.newAccount === "False") {
     model.checkLogin(req.body.username, function(data){
       if (data != 'User not found'){
@@ -32,11 +36,22 @@ router.post('/login', function(req, res){
 
 router.post('/home', function(req, res){
   model.fetchHomescreen(req.body.username, function(searchableMovies, watchlist, topratedlist){
-    console.log(searchableMovies);
-    console.log(watchlist);
-    console.log(topratedlist);
+    //console.log(searchableMovies);
+    //console.log(watchlist);
+    //console.log(topratedlist);
     res.json({searchableMovies: searchableMovies, watchlist: watchlist, topratedlist: topratedlist});
   })
 })
+
+router.get('/home/:searchword', function (req, res) {
+  // check if req.params.searchword exists in database
+  // console.log(req.params.searchword);
+  var exists = false;
+  if (exists === true){
+    res.json({response: "exists"});
+  } else {
+    res.json({response: "unavaliable"});
+  }
+});
 
 module.exports = router;

@@ -11,16 +11,12 @@
 
 
 		<form ng-submit="search()">
-            <input class="form-control" type="text" ng.model="search" id="searchInputField" autocomplete="off" placeholder="Search for movie" require autofocus>
+            <input class="form-control" type="text" ng-model="searchword" id="searchInputField" autocomplete="off" placeholder="Search for movie" require autofocus>
             <input class="btn btn-default" type="submit" id="searchButton" value="Take me there!">
         </form>
-
-      
-
-
-
-    
-
+        
+        <p id="notAvaliable" style="visibility:hidden">Sorry cannot find that movie</p>
+        
     
     <h1>Your personal ToWatchList</h1>
     <div class="towatchPanel">

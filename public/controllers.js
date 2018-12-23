@@ -12,16 +12,29 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
           Cookies.set("UserCookie", $scope.username, {expires : 7});
           $location.path('home');
         } else {
-          alert("Login failed you stupid!");
-          console.log('FEEEEL lösen och user');
+          document.getElementById("loginFailed").style = "visibility:visible";
+          document.getElementById("accountCreatedConfirmation").style = "visibility:hidden";
+          document.getElementById("notifyNoDetails").style = "visibility:hidden";
           $location.path('login');
         }          
       })
     };
     $scope.createAccount = function(){
       //skicka details till servern
-      http.post('login', {newAccount: "True", username: $scope.username, password: $scope.password}, function(resonse){
+      http.post('login', {newAccount: "True", username: $scope.username, password: $scope.password}, function(response){
         //agera på response ---> här ska vi setta cookies och skicka till home 
+        if (response === "Success"){
+          console.log("User was created, rerouting to login");
+          $location.path('login');
+          document.getElementById("accountCreatedConfirmation").style = "visibility:visible";
+          document.getElementById("notifyNoDetails").style = "visibility:hidden";
+          document.getElementById("loginFailed").style = "visibility:hidden";
+          //displaya att user har creatats
+        } else if (response === "noDetails"){
+          document.getElementById("notifyNoDetails").style = "visibility:visible";
+        } else {
+          console.log("nånting gick fel")
+        }
       })
     };
   }
@@ -29,15 +42,28 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
 
 fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location', 'UserService',
   function($scope, http, $location, user) {
-    http.post('/home', {username: Cookies.get("UserCookie")}, function(data){
-      $scope.searchableMovies = data.searchableMovies;
-      $scope.watchlist = data.watchlist;
-      $scope.topratedlist = data.topratedlist;
+    http.post('/home', {username: Cookies.get("UserCookie")}, function(res){
       //härifrån vill vi möjliggöra HTML-useage av a) movieWatchList, b) movietoprated och, c) searchableMovies
+      $scope.searchableMovies = res.searchableMovies;
+      $scope.watchlist = res.watchlist;
+      $scope.topratedlist = res.topratedlist;
       
-      //console.log(data);
+      
     })
     $scope.search = function(){
+      //här vill vi komma till en movie-sida
+      //console.log($scope.searchword);
+      http.get("/home/"+$scope.searchword, function (data) {
+        if (data.response === "exists"){
+          console.log("It does exist!");
+          // reroute to moviepage
+        } else if (data.response === "unavaliable"){
+          console.log("Doesnt exist");
+          // communicate unavaliability
+          document.getElementById("notAvaliable").style = "visibility:visible";
+        }
+      
+      })
       // extracta vad man sökt på
 
     }
