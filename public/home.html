@@ -1,17 +1,32 @@
+
+
+<html>
 <div class="container">
-	<h1>Find your favourite movie!</h1>
+    <h1>Find your favourite movie!</h1>
 	<div class="searchPanel">
-		<form ng-submit="done()">
-            <input class="form-control" type="text" ng.model="search" id="searchInputField" placeholder="Search for movie" require autofocus>
+        <h4>Searchable movies:</h4>
+        <div ng-repeat="movie in searchableMovies">
+            <span>{{movie.title}}</span>
+         </div>
+
+
+		<form ng-submit="search()">
+            <input class="form-control" type="text" ng.model="search" id="searchInputField" autocomplete="off" placeholder="Search for movie" require autofocus>
             <input class="btn btn-default" type="submit" id="searchButton" value="Take me there!">
-        </form>		
-    </div>
+        </form>
+
+      
+
+
+
+    
+
     
     <h1>Your personal ToWatchList</h1>
     <div class="towatchPanel">
         <div style="border: 2px solid black">
-            <div ng-repeat="movie in movies" ng-click="redirect(movie)">
-                <span><a href="">{{movie.name}}</a></span>
+            <div ng-repeat="movie in watchlist|limitTo:5" ng-click="redirect(movie)">
+                <span><a href="">{{movie.title}}</a></span>
             </div>
         </div>
 
@@ -20,11 +35,20 @@
     <h1>Lacking inspiration? Top rated movies last month</h1>
     <div class="towatchPanel">
         <div style="border: 2px solid black">
-            <div ng-repeat="movie in movies" ng-click="redirect(movie)">
-                <span><a href="">{{movie.name}}</a></span>
+            <div ng-repeat="movie in topratedlist|limitTo:5" ng-click="redirect(movie)">
+                <span><a href="">{{movie.title}}</a></span>
             </div>
         </div>
 
     </div>
 
 </div>
+
+
+
+
+
+</html>
+
+
+

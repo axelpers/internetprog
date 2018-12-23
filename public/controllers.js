@@ -5,7 +5,7 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
     $scope.username = "";
     $scope.password = "";
     $scope.done = function() {
-      http.post('login', {username: $scope.username, password: $scope.password}, function(response) {
+      http.post('login', {newAccount: "False", username: $scope.username, password: $scope.password}, function(response) {
         if (response === "Success"){
           console.log('Rätt lösen och user');
           //$cookies.put('cookie', $scope.username);
@@ -18,14 +18,30 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
         }          
       })
     };
+    $scope.createAccount = function(){
+      //skicka details till servern
+      http.post('login', {newAccount: "True", username: $scope.username, password: $scope.password}, function(resonse){
+        //agera på response ---> här ska vi setta cookies och skicka till home 
+      })
+    };
   }
 ]);
 
 fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location', 'UserService',
   function($scope, http, $location, user) {
     http.post('/home', {username: Cookies.get("UserCookie")}, function(data){
-      console.log(data);
+      $scope.searchableMovies = data.searchableMovies;
+      $scope.watchlist = data.watchlist;
+      $scope.topratedlist = data.topratedlist;
+      //härifrån vill vi möjliggöra HTML-useage av a) movieWatchList, b) movietoprated och, c) searchableMovies
+      
+      //console.log(data);
     })
+    $scope.search = function(){
+      // extracta vad man sökt på
+
+    }
+  
   }
 ]);
 

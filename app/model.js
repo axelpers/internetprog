@@ -4,7 +4,7 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('project', 'root', 'root',{
   host: 'localhost',
-  port: '8889',
+  port: '3306',
   dialect: 'mysql',
   logging: false
 });
@@ -28,7 +28,7 @@ exports.printMovies = function(){
 }
 
 exports.checkLogin = function(username, callback){
-  db.query("SELECT username FROM users WHERE username = :username",
+  db.query("SELECT username FROM users WHERE username = :username", // nu är det case sensitive, det kanske vi kan ordna (setta alla till lowercase i DB och lowercasea all input)
   {replacements: { username: username}, type: db.QueryTypes.SELECT })
   .then(user => {
     if(user[0].username === username){
@@ -43,13 +43,30 @@ exports.checkLogin = function(username, callback){
     });
 }
 
-exports.fetchWatchlist = function(username, callback){
+exports.fetchHomescreen = function(username, callback){
   db.query("SELECT * FROM movies WHERE title IN (SELECT title FROM watchlists WHERE username = :username)",
   {replacements: { username: username}, type: db.QueryTypes.SELECT })
   .then(watchlist => {
-    callback(watchlist);
-  })
+    var watchlist = watchlist;
+    
+    db.query("SELECT title FROM movies",
+    {type: db.QueryTypes.SELECT })
+    .then(searchableMovies => {
+      var searchableMovies = searchableMovies;
+
+      db.query("SELECT title FROM ratings WHERE rating >6",
+      {type: db.QueryTypes.SELECT })
+      .then(topratedlist => {
+        var topratedlist = topratedlist;
+        callback(searchableMovies, watchlist, topratedlist);
+      });
+    });
+  });
 }
+
+
+
+
 
 exports.addToWatchlist = function(user, movieTitle){
   var Watchlist = db.define('watchlists', {
