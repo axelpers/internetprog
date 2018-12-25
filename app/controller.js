@@ -43,15 +43,9 @@ router.post('/home', function(req, res){
   })
 })
 
-router.get('/home/:searchword', function (req, res) {
-  // check if req.params.searchword exists in database
-  // console.log(req.params.searchword);
-  var exists = false;
-  if (exists === true){
-    res.json({response: "exists"});
-  } else {
-    res.json({response: "unavaliable"});
-  }
-});
+router.get('/movies/:movie', function (req, res) {
+  model.getMovieObject(req.params.movie, function(movieObject){
+    res.json(movieObject)})
+})
 
 module.exports = router;

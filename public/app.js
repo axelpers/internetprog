@@ -20,9 +20,9 @@
         templateUrl: 'login.html',
         controller: 'loginController'
       }).
-      when('/room/:room', {
-        templateUrl: 'room.html',
-        controller: 'roomController'
+      when('/movies/:movie', {
+        templateUrl: 'movie.html',
+        controller: 'movieController'
       }).
       otherwise({
         redirectTo: '/login'

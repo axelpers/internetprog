@@ -42,59 +42,44 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
 
 fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location', 'UserService',
   function($scope, http, $location, user) {
-    http.post('/home', {username: Cookies.get("UserCookie")}, function(res){
+    http.post('home', {username: Cookies.get("UserCookie")}, function(res){
       //härifrån vill vi möjliggöra HTML-useage av a) movieWatchList, b) movietoprated och, c) searchableMovies
       $scope.searchableMovies = res.searchableMovies;
       $scope.watchlist = res.watchlist;
       $scope.topratedlist = res.topratedlist;
-      
-      
+
+      $scope.username = Cookies.get("UserCookie");
     })
+
     $scope.search = function(){
       //här vill vi komma till en movie-sida
       //console.log($scope.searchword);
-      http.get("/home/"+$scope.searchword, function (data) {
-        if (data.response === "exists"){
-          console.log("It does exist!");
+      var exists = true;
+      if (exists === true){
           // reroute to moviepage
-        } else if (data.response === "unavaliable"){
-          console.log("Doesnt exist");
+          $location.path('movies/'+$scope.searchword);
+      } else if (data.response === "unavaliable"){
           // communicate unavaliability
           document.getElementById("notAvaliable").style = "visibility:visible";
         }
-      
-      })
-      // extracta vad man sökt på
-
+      }
     }
-  
+]);
+
+
+fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routeParams', '$route',
+  function($scope, http, $routeParams, $route) {
+    $scope.movieName = $routeParams.movie;
+    console.log($routeParams.movie);
+    http.get('movies/'+$scope.movieName, function(data) {
+      console.log(data);
+      $scope.movieObject = data;
+    })
   }
 ]);
 
 
-
-
-
-
-
-
-
-fdbControllers.controller('listController', ['$scope', '$location',  'HttpService',
-  function($scope, $location, http) {
-
-    $scope.rooms = [];
-    http.get("/roomList", function(data) {
-      $scope.rooms = data.list;
-    });
-    $scope.redirect = function(room) {
-      console.log("Trying to enter room : " + room.name);
-      $location.hash("");
-      $location.path('/room/' + room.name);
-    };
-  }
-]);
-
-
+/////////
 
 fdbControllers.controller('navigationController', ['$scope',  '$location',
   function($scope,  $location) {
@@ -105,8 +90,9 @@ fdbControllers.controller('navigationController', ['$scope',  '$location',
       $location.hash("");
       $location.path('/' + address);
       $scope.location = $location.path();
-      console.log("location = " + $scope.location);
+      //console.log("location = " + $scope.location);
     };
 
   }
 ]);
+

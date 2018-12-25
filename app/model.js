@@ -65,6 +65,17 @@ exports.fetchHomescreen = function(username, callback){
 }
 
 
+exports.getMovieObject = function(title, callback){
+  // find the movieobject from DB
+  db.query("SELECT * FROM MOVIES WHERE title = :title",
+  {replacements: { title: title}, type: db.QueryTypes.SELECT})
+  .then(movieObject => {
+    var movieObject = movieObject[0];
+    callback(movieObject);
+  })
+
+}
+
 
 
 
@@ -84,6 +95,7 @@ exports.addRating = function(user, movieTitle, givenRating){
   });
   Rating.create({ username: user, title: movieTitle, rating: givenRating});
 }
+
 
 /**
  * Task.create({ title: 'foo', description: 'bar', deadline: new Date() }).then(task => {
