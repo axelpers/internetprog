@@ -8,37 +8,20 @@ var model = require("./model.js");
 
 router.post('/login', function(req, res){
   if(req.body.newAccount === "True"){
-    if ((req.body.username === "")||(req.body.password === "")){
-      res.json("noDetails");
-    } else {
-      //ska ny user
-      console.log("Skapar ny user.... Username: ", req.body.username, "och lösen: ", req.body.password);
-      // ...write to DB
-      res.json('Success')
-    }
-  } else if(req.body.newAccount === "False") {
-    model.checkLogin(req.body.username, function(data){
-      if (data != 'User not found'){
-        var pw = data[0].password;
-        if(pw.lenght === 0){
-          res.json('Failed');
-        } else if(pw === req.body.password){
-          res.json('Success');
-        } else {
-          res.json('Failed');
-        }
-      } else {
-        res.json('Failed');
-      }
+    model.createNewUser(req.body.username, req.body.password);
+    res.json('Success')
+  } else if (req.body.newAccount === "False") {
+    model.checkLogin(req.body.username, req.body.password, function(status, username){
+      res.json({status: status, username: username})
     })
+  } else {
+    console.log("trololol");
   }
 });
 
+
 router.post('/home', function(req, res){
   model.fetchHomescreen(req.body.username, function(searchableMovies, watchlist, topratedlist){
-    //console.log(searchableMovies);
-    //console.log(watchlist);
-    //console.log(topratedlist);
     res.json({searchableMovies: searchableMovies, watchlist: watchlist, topratedlist: topratedlist});
   })
 })

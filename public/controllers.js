@@ -4,44 +4,45 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
   function($scope, http, $location, user) {
     $scope.username = "";
     $scope.password = "";
-    $scope.login = function() {
-      http.post('login', {newAccount: "False", username: $scope.username, password: $scope.password}, function(response) {
-        if (response === "Success"){
-          console.log('Rätt lösen och user');
-          //$cookies.put('cookie', $scope.username);
-          Cookies.set("UserCookie", $scope.username, {expires : 7});
-          $location.path('home');
-        } else {
-          document.getElementById("loginFailed").style = "visibility:visible";
-          document.getElementById("accountCreatedConfirmation").style = "visibility:hidden";
-          document.getElementById("notifyNoDetails").style = "visibility:hidden";
-          $location.path('login');
-        }          
-      })
+    $scope.login = function() {     
+      if (($scope.username === "")||($scope.password === "")){
+        document.getElementById("messageBox").innerHTML = "Please enter details to log into your account!";
+      } else { 
+        http.post('login', {newAccount: "False", username: $scope.username, password: $scope.password}, function(response) {
+          console.log(response);
+          if (response.status === "Accepted"){
+            Cookies.set("UserCookie", response.username, {expires : 7});
+            $location.path('home');
+          } else if (response.status === "Declined"){
+            document.getElementById("messageBox").innerHTML = "Wrong username or password.";
+            $location.path('login');
+          }          
+        })
+      }
     };
     $scope.createAccount = function(){
-      //skicka details till servern
-      http.post('login', {newAccount: "True", username: $scope.username, password: $scope.password}, function(response){
-        //agera på response ---> här ska vi setta cookies och skicka till home 
-        if (response === "Success"){
-          console.log("User was created, rerouting to login");
-          $location.path('login');
-          document.getElementById("accountCreatedConfirmation").style = "visibility:visible";
-          document.getElementById("notifyNoDetails").style = "visibility:hidden";
-          document.getElementById("loginFailed").style = "visibility:hidden";
-          //displaya att user har creatats
-        } else if (response === "noDetails"){
-          document.getElementById("notifyNoDetails").style = "visibility:visible";
-        } else {
-          console.log("nånting gick fel")
-        }
-      })
+      if (($scope.username === "")||($scope.password === "")){
+        document.getElementById("messageBox").innerHTML = "Please enter details to create your account!";
+      } else {
+        http.post('login', {newAccount: "True", username: $scope.username, password: $scope.password}, function(response){
+          //agera på response ---> här ska vi setta cookies och skicka till home 
+          if (response === "Success"){
+            console.log("User was created, rerouting to login");
+            document.getElementById("messageBox").innerHTML = "Account succesfully created!";
+            $location.path('login');
+            //displaya att user har creatats
+          } else {
+            console.log("nånting gick fel")
+          }
+        })
+      }
     };
   }
 ]);
 
 fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location', 'UserService',
   function($scope, http, $location, user) {
+  
     http.post('home', {username: Cookies.get("UserCookie")}, function(res){
       //härifrån vill vi möjliggöra HTML-useage av a) movieWatchList, b) movietoprated och, c) searchableMovies
       $scope.searchableMovies = res.searchableMovies;

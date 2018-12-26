@@ -9,6 +9,35 @@ var db = new Sequelize('project', 'root', 'root',{
   logging: false
 });
 
+// Create movie table
+var Movies = db.define('movies', {
+  title: {type: Sequelize.STRING},
+  genre: {type: Sequelize.STRING},
+  year: {type: Sequelize.INTEGER},
+  streamedBy: {type: Sequelize.STRING},
+  avg_rating: {type: Sequelize.DOUBLE},
+  num_of_ratings: {type: Sequelize.INTEGER}
+});
+// Create user table
+var Users = db.define('users', {
+  username: {type: Sequelize.STRING},
+  password: {type: Sequelize.STRING},
+  email: {type: Sequelize.STRING}
+});
+// Create rating table
+var Rating = db.define('ratings', {
+  username: {type: Sequelize.STRING},
+  title: {type: Sequelize.STRING},
+  rating: {type: Sequelize.INTEGER}
+});
+// Create watchlist table
+var Watchlist = db.define('watchlists', {
+  username: {type: Sequelize.STRING},
+  title: {type: Sequelize.STRING}
+});
+
+
+
 exports.checkDB = function (){
   db.authenticate()
     .then(() => {
@@ -27,20 +56,27 @@ exports.printMovies = function(){
   });
 }
 
-exports.checkLogin = function(username, callback){
-  db.query("SELECT username FROM users WHERE username = :username", // nu är det case sensitive, det kanske vi kan ordna (setta alla till lowercase i DB och lowercasea all input)
-  {replacements: { username: username}, type: db.QueryTypes.SELECT })
-  .then(user => {
-    if(user[0].username.toLowerCase() === username.toLowerCase()){
-      db.query("SELECT password FROM users WHERE username = :username",
-        {replacements: { username: username}, type: db.QueryTypes.SELECT })
-        .then(data =>{
-          callback(data);
-        });
-      } else {
-        callback('User not found');
-      }
-    });
+exports.checkLogin = function(usernameEntered, passwordEntered, callback){
+  try{
+    db.query("SELECT * FROM users WHERE password = :password",
+      {replacements: { password: passwordEntered}, type: db.QueryTypes.SELECT })
+      .then(data =>{
+        var usernameDB = null;
+        for (var i=0; i<data.length; i++){ //det skulle kunna vara så att flera accounts har samma PW
+          if (data[i].username.toLowerCase() === usernameEntered.toLowerCase()){
+             usernameDB = data[i].username;
+          }
+        }
+        if (usernameDB !== null){
+          callback("Accepted", usernameDB); //skicka också med det korrekta Usernamet (om man t.ex. skrivit viktor med litet v)
+        } else {
+          callback("Declined", null);
+        }
+      });
+  } catch (e) {
+    callback("Declined", null);
+  }
+
 }
 
 exports.fetchHomescreen = function(username, callback){
@@ -64,7 +100,6 @@ exports.fetchHomescreen = function(username, callback){
   });
 }
 
-
 exports.getMovieObject = function(title, callback){
   // find the movieobject from DB
   db.query("SELECT * FROM MOVIES WHERE title = :title",
@@ -73,11 +108,7 @@ exports.getMovieObject = function(title, callback){
     var movieObject = movieObject[0];
     callback(movieObject);
   })
-
 }
-
-
-
 
 exports.addToWatchlist = function(user, movieTitle){
   var Watchlist = db.define('watchlists', {
@@ -96,23 +127,18 @@ exports.addRating = function(user, movieTitle, givenRating){
   Rating.create({ username: user, title: movieTitle, rating: givenRating});
 }
 
+exports.createNewUser = function(chosenUsername, chosenPassword){
+    Users.create({
+      username: chosenUsername, 
+      password: chosenPassword, 
+      email: 'default@mail.com'
+    });
+}
+     
 
-/**
- * Task.create({ title: 'foo', description: 'bar', deadline: new Date() }).then(task => {
-  // you can now access the newly created task via the variable task
-})
- */
+
 
 exports.createTables = function (){
-  // Create movie table
-  var Movies = db.define('movies', {
-    title: {type: Sequelize.STRING},
-    genre: {type: Sequelize.STRING},
-    year: {type: Sequelize.INTEGER},
-    streamedBy: {type: Sequelize.STRING},
-    avg_rating: {type: Sequelize.DOUBLE},
-    num_of_ratings: {type: Sequelize.INTEGER}
-  });
   // Fill movie table
   // force: true will drop the table if it already exists
   Movies.sync({force: true}).then(() => {
@@ -125,12 +151,7 @@ exports.createTables = function (){
       {title: 'They Shall Not Grow Old', genre: 'Historia', year: 2018, streamedBy: 'None', avg_rating: 4.5, num_of_ratings: 22 }
     ]);
   });
-  // Create user table
-  var Users = db.define('users', {
-    username: {type: Sequelize.STRING},
-    password: {type: Sequelize.STRING},
-    email: {type: Sequelize.STRING}
-  });
+
   // force: true will drop the table if it already exists
   Users.sync({force: true}).then(() => {
     // Table created
@@ -139,12 +160,7 @@ exports.createTables = function (){
       {username: 'Viktor', password: 'viktor94', email: 'viktor@mail.com'}
     ]);
   });
-  // Create rating table
-  var Rating = db.define('ratings', {
-    username: {type: Sequelize.STRING},
-    title: {type: Sequelize.STRING},
-    rating: {type: Sequelize.INTEGER}
-  });
+
   // force: true will drop the table if it already exists
   Rating.sync({force: true}).then(() => {
     // Table created
@@ -153,11 +169,7 @@ exports.createTables = function (){
       {username: 'Viktor', title: 'Wall Street', rating: '10'}
     ]);
   });
-  // Create watchlist table
-  var Watchlist = db.define('watchlists', {
-    username: {type: Sequelize.STRING},
-    title: {type: Sequelize.STRING}
-  });
+  
   // force: true will drop the table if it already exists
   Watchlist.sync({force: true}).then(() => {
     // Table created
