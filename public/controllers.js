@@ -31,6 +31,9 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
             document.getElementById("messageBox").innerHTML = "Account succesfully created!";
             $location.path('login');
             //displaya att user har creatats
+          } else if (response === "Declined") {
+            console.log("Username already taken");
+            document.getElementById("messageBox").innerHTML = "Username '"+$scope.username+"' is already taken";
           } else {
             console.log("nånting gick fel")
           }

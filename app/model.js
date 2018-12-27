@@ -127,11 +127,24 @@ exports.addRating = function(user, movieTitle, givenRating){
   Rating.create({ username: user, title: movieTitle, rating: givenRating});
 }
 
-exports.createNewUser = function(chosenUsername, chosenPassword){
-    Users.create({
-      username: chosenUsername, 
-      password: chosenPassword, 
-      email: 'default@mail.com'
+exports.createNewUser = function(chosenUsername, chosenPassword, callback){
+  db.query("SELECT username FROM users WHERE username = :chosenUsername",
+    {replacements: {chosenUsername :chosenUsername}, type: db.QueryTypes.SELECT })
+    .then(data => {
+      var alreadyTaken = false;
+      try{
+        if (data[0].username.toLowerCase() === chosenUsername.toLowerCase()){
+          alreadyTaken = true;
+        }
+      } catch(e){}
+
+      if (alreadyTaken === false){
+        console.log("creating user...");
+        Users.create({username: chosenUsername, password: chosenPassword, email: 'default@mail.com'})
+        callback('Success');
+      } else {
+        callback('Declined');
+      }
     });
 }
      

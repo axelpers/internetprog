@@ -8,8 +8,9 @@ var model = require("./model.js");
 
 router.post('/login', function(req, res){
   if(req.body.newAccount === "True"){
-    model.createNewUser(req.body.username, req.body.password);
-    res.json('Success')
+    model.createNewUser(req.body.username, req.body.password, function(message){
+      res.json(message);
+    });
   } else if (req.body.newAccount === "False") {
     model.checkLogin(req.body.username, req.body.password, function(status, username){
       res.json({status: status, username: username})
