@@ -4,7 +4,7 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('project', 'root', 'root',{
   host: 'localhost',
-  port: '3306',
+  port: '8889',
   dialect: 'mysql',
   logging: false
 });
@@ -76,7 +76,6 @@ exports.checkLogin = function(usernameEntered, passwordEntered, callback){
   } catch (e) {
     callback("Declined", null);
   }
-
 }
 
 exports.fetchHomescreen = function(username, callback){
@@ -99,6 +98,34 @@ exports.fetchHomescreen = function(username, callback){
     });
   });
 }
+
+exports.addNewRating = function(user, movieTitle, newRating){
+  var alreadyRated = false;
+  // Checkar först ifall det redan finns en sådan rating
+  db.query("SELECT * FROM ratings WHERE username = :user AND title = :movieTitle",
+    {replacements: {user: user, movieTitle: movieTitle}, type: db.QueryTypes.SELECT })
+    .then(data => {
+      try{
+        // Om det är en ny rating av samma person på samma film så uppdaterar vi siffran
+        if (data[0].rating !== newRating){
+          alreadyRated = true;
+          db.query("UPDATE ratings SET rating = :newRating WHERE username = :user AND title = :movieTitle",
+          {replacements: {newRating: newRating, user: user, movieTitle: movieTitle}, type: db.QueryTypes.UPDATE });
+          // Om det är samma rating igen, do nothing
+        } else if (data[0].rating === newRating){
+          alreadyRated = true;
+        }
+      } catch(e){}
+      // Om user aldrig rateat filmen innan skapas en ny rad i rating-tabellen
+      if (alreadyRated === false){
+        Rating.create({username: user, title: movieTitle, rating: newRating});
+      }
+    });
+}
+
+// updateAvgRating = function(){
+  
+// }
 
 exports.getMovieObject = function(title, callback){
   // find the movieobject from DB
@@ -147,9 +174,6 @@ exports.createNewUser = function(chosenUsername, chosenPassword, callback){
       }
     });
 }
-     
-
-
 
 exports.createTables = function (){
   // Fill movie table
@@ -194,6 +218,3 @@ exports.createTables = function (){
     ]);
   });
 }
-
-
-
