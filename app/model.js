@@ -133,7 +133,7 @@ exports.getMovieObject = function(title, callback){
     db.query("SELECT AVG(rating) AS avg FROM ratings WHERE title = :title",
     {replacements: { title: title}, type: db.QueryTypes.SELECT})
     .then(averageRating => {
-      callback(movieObject, Math.round((averageRating[0].avg*10)/10));
+      callback(movieObject, Math.round(averageRating[0].avg*10)/10);
     });
   });
 }
