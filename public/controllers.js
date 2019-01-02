@@ -75,9 +75,10 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
   function($scope, http, $routeParams, $route) {
     $scope.movieName = $routeParams.movie;
     console.log($routeParams.movie);
-    http.get('movies/'+$scope.movieName, function(data) {
-      console.log(data);
-      $scope.movieObject = data;
+    http.get('movies/'+$scope.movieName, function(res) {
+      console.log(res);
+      $scope.movieObject = res.movieObject;
+      $scope.averageRating = res.averageRating;
     })
   }
 ]);

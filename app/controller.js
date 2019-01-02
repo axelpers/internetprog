@@ -28,8 +28,8 @@ router.post('/home', function(req, res){
 })
 
 router.get('/movies/:movie', function (req, res) {
-  model.getMovieObject(req.params.movie, function(movieObject){
-    res.json(movieObject)})
+  model.getMovieObject(req.params.movie, function(movieObject, averageRating){
+    res.json({movieObject: movieObject, averageRating: averageRating})});
 })
 
 module.exports = router;

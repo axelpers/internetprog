@@ -14,15 +14,12 @@ var Movies = db.define('movies', {
   title: {type: Sequelize.STRING},
   genre: {type: Sequelize.STRING},
   year: {type: Sequelize.INTEGER},
-  streamedBy: {type: Sequelize.STRING},
-  avg_rating: {type: Sequelize.DOUBLE},
-  num_of_ratings: {type: Sequelize.INTEGER}
+  streamedBy: {type: Sequelize.STRING}
 });
 // Create user table
 var Users = db.define('users', {
   username: {type: Sequelize.STRING},
-  password: {type: Sequelize.STRING},
-  email: {type: Sequelize.STRING}
+  password: {type: Sequelize.STRING}
 });
 // Create rating table
 var Rating = db.define('ratings', {
@@ -133,8 +130,12 @@ exports.getMovieObject = function(title, callback){
   {replacements: { title: title}, type: db.QueryTypes.SELECT})
   .then(movieObject => {
     var movieObject = movieObject[0];
-    callback(movieObject);
-  })
+    db.query("SELECT AVG(rating) AS avg FROM ratings WHERE title = :title",
+    {replacements: { title: title}, type: db.QueryTypes.SELECT})
+    .then(averageRating => {
+      callback(movieObject, Math.round((averageRating[0].avg*10)/10));
+    });
+  });
 }
 
 exports.addToWatchlist = function(user, movieTitle){
@@ -164,10 +165,9 @@ exports.createNewUser = function(chosenUsername, chosenPassword, callback){
           alreadyTaken = true;
         }
       } catch(e){}
-
       if (alreadyTaken === false){
         console.log("creating user...");
-        Users.create({username: chosenUsername, password: chosenPassword, email: 'default@mail.com'})
+        Users.create({username: chosenUsername, password: chosenPassword})
         callback('Success');
       } else {
         callback('Declined');
@@ -180,12 +180,12 @@ exports.createTables = function (){
   // force: true will drop the table if it already exists
   Movies.sync({force: true}).then(() => {
     return Movies.bulkCreate([
-      {title: 'Nightcrawler', genre: 'Thriller', year: 2014, streamedBy: 'Netflix', avg_rating: 4.4, num_of_ratings: 18 },
-      {title: 'Kung Fu Panda', genre: 'Barn', year: 2008, streamedBy: 'CMORE', avg_rating: 3.6, num_of_ratings: 30 },
-      {title: 'Wall Street', genre: 'Drama', year: 1987, streamedBy: 'None', avg_rating: 4.7, num_of_ratings: 46 },
-      {title: 'The Town', genre: 'Crime', year: 2010, streamedBy: 'Netflix', avg_rating: 4.0, num_of_ratings: 8 },
-      {title: 'Trettioåriga kriget', genre: 'Historia', year: 2018, streamedBy: 'SVT Play', avg_rating: 3.2, num_of_ratings: 3 },
-      {title: 'They Shall Not Grow Old', genre: 'Historia', year: 2018, streamedBy: 'None', avg_rating: 4.5, num_of_ratings: 22 }
+      {title: 'Nightcrawler', genre: 'Thriller', year: 2014, streamedBy: 'Netflix'},
+      {title: 'Kung Fu Panda', genre: 'Barn', year: 2008, streamedBy: 'CMORE'},
+      {title: 'Wall Street', genre: 'Drama', year: 1987, streamedBy: 'None'},
+      {title: 'The Town', genre: 'Crime', year: 2010, streamedBy: 'Netflix'},
+      {title: 'Trettioåriga kriget', genre: 'Historia', year: 2018, streamedBy: 'SVT Play'},
+      {title: 'They Shall Not Grow Old', genre: 'Historia', year: 2018, streamedBy: 'None'}
     ]);
   });
 
@@ -193,8 +193,8 @@ exports.createTables = function (){
   Users.sync({force: true}).then(() => {
     // Table created
     return Users.bulkCreate([
-      {username: 'Axel', password: 'password', email: 'axel@mail.com'},
-      {username: 'Viktor', password: 'viktor94', email: 'viktor@mail.com'}
+      {username: 'Axel', password: 'password'},
+      {username: 'Viktor', password: 'viktor94'}
     ]);
   });
 

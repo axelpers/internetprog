@@ -36,7 +36,7 @@ var model = require('./model.js');
 
 model.checkDB();
 //model.createTables();
-model.addNewRating('Viktor', 'Nightcrawler', 8);
+//model.addNewRating('Viktor', 'Nightcrawler', 8);
 
 
 
