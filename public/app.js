@@ -25,7 +25,7 @@
         controller: 'movieController'
       }).
       otherwise({
-        redirectTo: '/login'
+        redirectTo: '/home'
       });
   }]);
 })();
