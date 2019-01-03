@@ -56,17 +56,43 @@ fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location
         $scope.watchlist = res.watchlist;
         $scope.topratedlist = res.topratedlist;
 
+        $scope.complete = function(searchword){  
+          $scope.hidethis = false;  
+          var output = [];
+          var maxCounter = 0;
+          angular.forEach($scope.searchableMovies, function(movieTitle){ 
+            if (searchword.length !== 0){
+              if (maxCounter < 10){
+                if(movieTitle.toLowerCase().indexOf(searchword.toLowerCase()) >= 0){  
+                  output.push(movieTitle);  
+                  maxCounter++;
+                }
+              }
+            }  
+          });  
+          $scope.filterMovie = output;  
+        }  
+        $scope.fillTextbox = function(searchword){  
+          $location.path('movies/'+searchword)
+        }
+
         $scope.username = Cookies.get("UserCookie");
       })
 
+      /*
       $scope.search = function(){
+        console.log($scope.movieTitle);
         var exists = true;
         if (exists === true){
-            $location.path('movies/'+$scope.searchword);
+          $location.path('movies/'+$scope.movieTitle);
         } else if (data.response === "unavaliable"){
-            document.getElementById("notAvaliable").style = "visibility:visible";
+          document.getElementById("messageBoxHome").innerHTML = "Cannot find movie: '"+$scope.searchword;
         }
-      }
+      }*/
+
+
+        
+
     } else {
       $location.path('login');
     }
@@ -78,12 +104,15 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
   function($scope, http, $routeParams, $route) {
     if ((Cookies.get("loginStatus") === "logged out") || (Cookies.get("loginStatus") === undefined)){
       $location.path('login')
+
     } else if (Cookies.get("loginStatus") === "logged in"){
       $scope.movieName = $routeParams.movie;
       http.get('movies/'+$scope.movieName, function(res) {
+        console.log(res);
         $scope.movieObject = res.movieObject;
         $scope.averageRating = res.averageRating;
       })
+
     } else{
       $location.path('login');
     }
@@ -91,7 +120,7 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
 ]);
 
 
-/////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fdbControllers.controller('navigationController', ['$scope',  '$location',
   function($scope,  $location) {
@@ -102,7 +131,6 @@ fdbControllers.controller('navigationController', ['$scope',  '$location',
       $location.hash("");
       $location.path('/' + address);
       $scope.location = $location.path();
-      //console.log("location = " + $scope.location);
     };
 
     $scope.logout = function(){
@@ -113,5 +141,8 @@ fdbControllers.controller('navigationController', ['$scope',  '$location',
 
   }
 ]);
+
+
+
 
 

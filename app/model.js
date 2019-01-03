@@ -84,7 +84,11 @@ exports.fetchHomescreen = function(username, callback){
     db.query("SELECT title FROM movies",
     {type: db.QueryTypes.SELECT })
     .then(searchableMovies => {
-      var searchableMovies = searchableMovies;
+      var movieTitleList = [];
+      for (var i=0 ; i<searchableMovies.length ; i++){
+        movieTitleList.push(searchableMovies[i].title);
+      }
+      var searchableMovies = movieTitleList;
 
       db.query("SELECT title FROM ratings WHERE rating >6",
       {type: db.QueryTypes.SELECT })

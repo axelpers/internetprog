@@ -3,19 +3,15 @@
 <html>
 <div class="container">
     <h1>Welcome {{username}}!</h1>
+
+
 	<div class="searchPanel">
-        <h4>Searchable movies:</h4>
-        <div ng-repeat="movie in searchableMovies">
-            <span>{{movie.title}}</span>
-         </div>
+        <input type="text" autocomplete="off" placeholder="Search movies..." name="movieTitle" id="movieTitle" ng-model="movieTitle" ng-keyup="complete(movieTitle)" class="form-control" />  
+            <ul class="list-group" ng-model="hidethis" ng-hide="hidethis">  
+                    <li class="list-group-item" ng-repeat="movieTitle in filterMovie" ng-click="fillTextbox(movieTitle)">{{movieTitle}}</li>  
+            </ul>
+    </div>
 
-
-		<form ng-submit="search()">
-            <input class="form-control" type="text" ng-model="searchword" id="searchInputField" autocomplete="off" placeholder="Search for movie" require autofocus>
-            <input class="btn btn-default" type="submit" id="searchButton" value="Take me there!">
-        </form>
-        
-        <p id="notAvaliable" style="visibility:hidden">Sorry cannot find that movie</p>
         
     
     <h1>Your personal ToWatchList</h1>
