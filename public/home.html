@@ -1,21 +1,15 @@
-
-
 <html>
 <div class="container">
-    <h1>Welcome {{username}}!</h1>
-
-
-	<div class="searchPanel">
+	<div class="searchPanel" id="searchPanel">
+        <h1>Welcome {{username}}!</h1>
         <input type="text" autocomplete="off" placeholder="Search movies..." name="movieTitle" id="movieTitle" ng-model="movieTitle" ng-keyup="complete(movieTitle)" class="form-control" />  
             <ul class="list-group" ng-model="hidethis" ng-hide="hidethis">  
                     <li class="list-group-item" ng-repeat="movieTitle in filterMovie" ng-click="fillTextbox(movieTitle)">{{movieTitle}}</li>  
             </ul>
     </div>
 
-        
-    
-    <h1>Your personal ToWatchList</h1>
-    <div class="towatchPanel">
+    <div class="towatchPanel" id="toWatchPanel">
+        <h1>Your personal ToWatchList</h1>
         <div style="border: 2px solid black">
             <div ng-repeat="movie in watchlist|limitTo:5" ng-click="redirect(movie)">
                 <span><a href="">{{movie.title}}</a></span>
@@ -24,22 +18,15 @@
 
     </div>
 
-    <h1>Lacking inspiration? Top rated movies last month</h1>
-    <div class="towatchPanel">
+    <div class="inspirationPanel" id="inspirationPanel">
+        <h1>Lacking inspiration? Top rated movies last month</h1>
         <div style="border: 2px solid black">
             <div ng-repeat="movie in topratedlist|limitTo:5" ng-click="redirect(movie)">
                 <span><a href="">{{movie.title}}</a></span>
             </div>
         </div>
-
     </div>
-
 </div>
-
-
-
-
-
 </html>
 
 
