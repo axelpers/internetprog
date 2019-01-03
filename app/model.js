@@ -14,7 +14,8 @@ var Movies = db.define('movies', {
   title: {type: Sequelize.STRING},
   genre: {type: Sequelize.STRING},
   year: {type: Sequelize.INTEGER},
-  streamedBy: {type: Sequelize.STRING}
+  streamedBy: {type: Sequelize.STRING},
+  image: {type: Sequelize.STRING}
 });
 // Create user table
 var Users = db.define('users', {
@@ -184,12 +185,12 @@ exports.createTables = function (){
   // force: true will drop the table if it already exists
   Movies.sync({force: true}).then(() => {
     return Movies.bulkCreate([
-      {title: 'Nightcrawler', genre: 'Thriller', year: 2014, streamedBy: 'Netflix'},
-      {title: 'Kung Fu Panda', genre: 'Barn', year: 2008, streamedBy: 'CMORE'},
-      {title: 'Wall Street', genre: 'Drama', year: 1987, streamedBy: 'None'},
-      {title: 'The Town', genre: 'Crime', year: 2010, streamedBy: 'Netflix'},
-      {title: 'Trettioåriga kriget', genre: 'Historia', year: 2018, streamedBy: 'SVT Play'},
-      {title: 'They Shall Not Grow Old', genre: 'Historia', year: 2018, streamedBy: 'None'}
+      {title: 'Nightcrawler', genre: 'Thriller', year: 2014, streamedBy: 'Netflix', image: 'Nightcrawler'},
+      {title: 'Kung Fu Panda', genre: 'Barn', year: 2008, streamedBy: 'CMORE', image: 'Kung_Fu_Panda'},
+      {title: 'Wall Street', genre: 'Drama', year: 1987, streamedBy: 'None', image: 'Wall_Street'},
+      {title: 'The Town', genre: 'Crime', year: 2010, streamedBy: 'Netflix', image: 'The_Town'},
+      {title: 'Trettioåriga kriget', genre: 'Historia', year: 2018, streamedBy: 'SVT Play', image: 'Trettioariga_Kriget'},
+      {title: 'They Shall Not Grow Old', genre: 'Historia', year: 2018, streamedBy: 'None', image: 'They_Shall_Not_Grow_Old'}
     ]);
   });
 
@@ -207,7 +208,10 @@ exports.createTables = function (){
     // Table created
     return Rating.bulkCreate([
       {username: 'Axel', title: 'Nightcrawler', rating: '7'},
-      {username: 'Viktor', title: 'Wall Street', rating: '10'}
+      {username: 'Viktor', title: 'Wall Street', rating: '10'},
+      {username: 'Axel', title: 'Kung Fu Panda', rating: '5'},
+      {username: 'Viktor', title: 'The Town', rating: '7'},
+      {username: 'Axel', title: 'Trettioåriga Kriget', rating: '10'}
     ]);
   });
   
