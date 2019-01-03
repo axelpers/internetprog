@@ -4,7 +4,7 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('project', 'root', 'root',{
   host: 'localhost',
-  port: '8889',
+  port: '3306',
   dialect: 'mysql',
   logging: false
 });
