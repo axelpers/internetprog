@@ -55,43 +55,27 @@ fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location
         $scope.searchableMovies = res.searchableMovies;
         $scope.watchlist = res.watchlist;
         $scope.topratedlist = res.topratedlist;
-
-        $scope.complete = function(searchword){  
-          $scope.hidethis = false;  
-          var output = [];
-          var maxCounter = 0;
-          angular.forEach($scope.searchableMovies, function(movieTitle){ 
-            if (searchword.length !== 0){
-              if (maxCounter < 10){
-                if(movieTitle.toLowerCase().indexOf(searchword.toLowerCase()) >= 0){  
-                  output.push(movieTitle);  
-                  maxCounter++;
-                }
-              }
-            }  
-          });  
-          $scope.filterMovie = output;  
-        }  
-        $scope.fillTextbox = function(searchword){  
-          $location.path('movies/'+searchword)
-        }
-
         $scope.username = Cookies.get("UserCookie");
       })
-
-      /*
-      $scope.search = function(){
-        console.log($scope.movieTitle);
-        var exists = true;
-        if (exists === true){
-          $location.path('movies/'+$scope.movieTitle);
-        } else if (data.response === "unavaliable"){
-          document.getElementById("messageBoxHome").innerHTML = "Cannot find movie: '"+$scope.searchword;
-        }
-      }*/
-
-
-        
+      $scope.complete = function(searchword){  
+        $scope.hidethis = false;  
+        var output = [];
+        var maxCounter = 0;
+        angular.forEach($scope.searchableMovies, function(movieTitle){ 
+          if (searchword.length !== 0){
+            if (maxCounter < 10){
+              if(movieTitle.toLowerCase().indexOf(searchword.toLowerCase()) >= 0){  
+                output.push(movieTitle);  
+                maxCounter++;
+              }
+            }
+          }  
+        });  
+        $scope.filterMovie = output;  
+      }  
+      $scope.fillTextbox = function(searchword){  
+        $location.path('movies/'+searchword)
+      }        
 
     } else {
       $location.path('login');
