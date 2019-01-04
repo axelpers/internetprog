@@ -1,15 +1,61 @@
-<div class="bg">
-<div class="container">
-  <section class="col-md-10 col-md-offset-1">
-    <div class="row" style="text-align: center;">
-      <h1>{{movieObject.title}}</h1>
+<div class="bg" style="text-align: center;">
+  <h1>{{movieObject.title}}</h1>
+
+  <div id="parent">
+
+    <div id="leftContainer">
+      <!-- Lägg bild här.  -->
       <img src = "/images/{{movieObject.image}}.jpg" height="400" width="272">
-      Title: {{movieObject.title}}
-      Genre: {{movieObject.genre}}
-      Year: {{movieObject.year}}
-      Steams: {{movieObject.streamedBy}}
-      Average rating: {{averageRating}}
     </div>
-  </section>
+
+    <div id="centerContainer">
+      <!-- placeholder for awesome UI  -->
+    </div>
+
+    <div id="rightContainer">
+      <div id="movieInfo" style="text-align: left;">
+        <!-- Lägg filminfo här (genre, rating, streams, addrating) -->
+        <p>Title: {{movieObject.title}}</p>
+        <p>Genre: {{movieObject.genre}}</p>
+        <p>Year: {{movieObject.year}}</p>
+        <p>Steams: {{movieObject.streamedBy}}</p>
+      </div>
+
+      <div id="starRating" style="display: flex; width: 190px;">
+        <span class="stars">  
+          <span ng-style="{ 'width': getStars(averageRating) }"></span>
+        </span>
+        <p style="flex: 1;">{{averageRating}}</p>
+      </div>
+
+      <div id="addOrRemoveButton" style="text-align: left;">
+        <!-- Knapp som hanterar WatchList -->
+        <p>Button</p>
+      </div>
+
+    </div>
+  </div>
 </div>
-</div>
+
+<style>
+#parent {
+  display: flex;
+}
+
+#leftContainer {
+  width: 272px;
+  background: transparent;
+}
+
+#rightContainer {
+  flex: 1;
+  background:transparent;
+}
+
+#centerContainer {
+  width: 100px;
+  background: transparent;
+}
+</style>
+
+  

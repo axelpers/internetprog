@@ -92,10 +92,20 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
     } else if (Cookies.get("loginStatus") === "logged in"){
       $scope.movieName = $routeParams.movie;
       http.get('movies/'+$scope.movieName, function(res) {
-        console.log(res);
         $scope.movieObject = res.movieObject;
         $scope.averageRating = res.averageRating;
+
+
+        $scope.getStars = function(rating) {
+          // Get the value
+          var val = parseFloat(rating);
+          // Turn value into number/100
+          var size = val/10*100;
+          return size + '%';
+      }
       })
+
+      
 
     } else{
       $location.path('login');

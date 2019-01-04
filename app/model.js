@@ -4,7 +4,7 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('project', 'root', 'root',{
   host: 'localhost',
-  port: '8889',
+  port: '3306',
   dialect: 'mysql',
   logging: false
 });
@@ -209,9 +209,12 @@ exports.createTables = function (){
     return Rating.bulkCreate([
       {username: 'Axel', title: 'Nightcrawler', rating: '7'},
       {username: 'Viktor', title: 'Wall Street', rating: '10'},
+      {username: 'Axel', title: 'Wall Street', rating: '7'},
       {username: 'Axel', title: 'Kung Fu Panda', rating: '5'},
       {username: 'Robban', title: 'Kung Fu Panda', rating: '6'},
+      {username: 'Robban', title: 'Wall Street', rating: '3'},
       {username: 'Viktor', title: 'Kung Fu Panda', rating: '8'},
+      {username: 'Robban', title: 'They Shall Not Grow Old', rating: '6'},
       {username: 'Viktor', title: 'The Town', rating: '7'},
       {username: 'Axel', title: 'Trettioåriga Kriget', rating: '10'},
       {username: 'Viktor', title: 'Trettioåriga Kriget', rating: '8'}
