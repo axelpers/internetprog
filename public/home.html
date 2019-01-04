@@ -10,9 +10,13 @@
 
     <div class="towatchPanel" id="toWatchPanel">
         <h1>Your personal ToWatchList</h1>
-        <div style="border: 2px solid black">
-            <div ng-repeat="movie in watchlist|limitTo:5" ng-click="redirectToMovie(movie.title)">
-                <span><a href=""><img src = "/images/{{movie.image}}.jpg" ></a></span>
+        <div>
+
+            <div ng-repeat="movie in watchlist|limitTo:5" ng-click="redirectToMovie(movie.title)" style="display: inline-block" >
+                <div style="text-align: center">
+                        <span><a href=""><img class="thumbnail" src = "/images/{{movie.image}}.jpg" height="250" width="170"></a></span>
+                        <p>{{movie.title}}</p>
+                </div>
             </div>
         </div>
 
@@ -20,11 +24,12 @@
 
     <div class="inspirationPanel" id="inspirationPanel">
         <h1>Lacking inspiration? Top rated movies last month</h1>
-        <div style="border: 2px solid black">
-            <div ng-repeat="movie in topratedlist" ng-click="redirectToMovie(movie.title)">
-                <span><a href=""><img src = "/images/{{movie.image}}.jpg" ></a></span>
-                <span><a href="">{{movie.title}}</a></span>
-                <span><a>{{movie.avgRating}}</a></span>
+        <div>
+            <div ng-repeat="movie in topratedlist" ng-click="redirectToMovie(movie.title)" style="display: inline-block">
+                <div style="text-align: center">
+                    <span><a href=""><img class="thumbnail" src = "/images/{{movie.image}}.jpg" height="250" width="170"></a></span>
+                    <p>{{movie.title}} {{movie.avgRating | number: 1}}</p>
+                </div>
             </div>
         </div>
     </div>

@@ -94,8 +94,6 @@ exports.fetchHomescreen = function(username, callback){
       {type: db.QueryTypes.SELECT })
       .then(topratedlist => {
         var topratedlist = topratedlist;
-
-        
         callback(searchableMovies, watchlist, topratedlist);
       });
     });
@@ -200,7 +198,8 @@ exports.createTables = function (){
     // Table created
     return Users.bulkCreate([
       {username: 'Axel', password: 'password'},
-      {username: 'Viktor', password: 'viktor94'}
+      {username: 'Viktor', password: 'viktor94'},
+      {username: 'Robban', password: 'robban123'}
     ]);
   });
 
@@ -211,6 +210,8 @@ exports.createTables = function (){
       {username: 'Axel', title: 'Nightcrawler', rating: '7'},
       {username: 'Viktor', title: 'Wall Street', rating: '10'},
       {username: 'Axel', title: 'Kung Fu Panda', rating: '5'},
+      {username: 'Robban', title: 'Kung Fu Panda', rating: '6'},
+      {username: 'Viktor', title: 'Kung Fu Panda', rating: '8'},
       {username: 'Viktor', title: 'The Town', rating: '7'},
       {username: 'Axel', title: 'Trettioåriga Kriget', rating: '10'},
       {username: 'Viktor', title: 'Trettioåriga Kriget', rating: '8'}
