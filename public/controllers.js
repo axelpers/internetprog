@@ -73,7 +73,7 @@ fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location
         });  
         $scope.filterMovie = output;  
       }  
-      $scope.fillTextbox = function(searchword){  
+      $scope.redirectToMovie = function(searchword){  
         $location.path('movies/'+searchword)
       }        
 

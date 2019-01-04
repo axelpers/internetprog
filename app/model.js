@@ -4,7 +4,7 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('project', 'root', 'root',{
   host: 'localhost',
-  port: '3306',
+  port: '8889',
   dialect: 'mysql',
   logging: false
 });
@@ -90,11 +90,12 @@ exports.fetchHomescreen = function(username, callback){
         movieTitleList.push(searchableMovies[i].title);
       }
       var searchableMovies = movieTitleList;
-
-      db.query("SELECT title FROM ratings WHERE rating >6",
+      db.query("SELECT joined.title, joined.image, AVG(joined.rating) AS avgRating FROM (SELECT movies.title, movies.image, ratings.rating FROM movies INNER JOIN ratings ON movies.title = ratings.title) joined GROUP BY joined.title, joined.image ORDER BY avgRating DESC LIMIT 5",
       {type: db.QueryTypes.SELECT })
       .then(topratedlist => {
         var topratedlist = topratedlist;
+
+        
         callback(searchableMovies, watchlist, topratedlist);
       });
     });
@@ -211,7 +212,8 @@ exports.createTables = function (){
       {username: 'Viktor', title: 'Wall Street', rating: '10'},
       {username: 'Axel', title: 'Kung Fu Panda', rating: '5'},
       {username: 'Viktor', title: 'The Town', rating: '7'},
-      {username: 'Axel', title: 'Trettioåriga Kriget', rating: '10'}
+      {username: 'Axel', title: 'Trettioåriga Kriget', rating: '10'},
+      {username: 'Viktor', title: 'Trettioåriga Kriget', rating: '8'}
     ]);
   });
   
