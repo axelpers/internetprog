@@ -35,7 +35,7 @@ io.on('connection', function (socket) {
 var model = require('./model.js');
 
 model.checkDB();
-model.createTables();
+//model.createTables();
 //model.addNewRating('Viktor', 'Nightcrawler', 4);
 
 
