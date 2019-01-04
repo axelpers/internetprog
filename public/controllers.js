@@ -84,8 +84,8 @@ fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location
 ]);
 
 
-fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routeParams', '$route',
-  function($scope, http, $routeParams, $route) {
+fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routeParams', '$location',
+  function($scope, http, $routeParams, $location) {
     if ((Cookies.get("loginStatus") === "logged out") || (Cookies.get("loginStatus") === undefined)){
       $location.path('login')
 
