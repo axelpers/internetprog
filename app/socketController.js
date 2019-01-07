@@ -12,17 +12,8 @@ module.exports = function (socket, io) {
   });
 
   // user gets updated
-  socket.on('update', function (req) {
-    console.log(req.securityName);
-
-    model.findSecurity(req.securityName).addOrder(req.securityName, req.securityID, req.orderType, req.volume, req.price);
-    model.checkClearing(model.findSecurity(req.securityName));
-    
-    var tradeList = model.findSecurity(req.securityName).tradeList.sort(function(a,b){return a.tradeID - b.tradeID}).reverse();
-    var sellOrderbook = model.getSellOrderbook(req.securityName);
-    var buyOrderbook = model.getBuyOrderbook(req.securityName);
-        
-    io.to(req.securityName).emit('update', {sellOrderbook: sellOrderbook, buyOrderbook: buyOrderbook, tradeList: tradeList});
+  socket.on('updateWatchlist', function (req) {
+    model.updateWatchlist(req.inWatchlist, req.user, req.movie);
   });
 
   // user leaves room

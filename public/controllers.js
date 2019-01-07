@@ -1,6 +1,5 @@
 var fdbControllers = angular.module('fdbControllers', []);
 
-
 fdbControllers.controller('loginController', ['$scope', 'HttpService', '$location', 'UserService',
   function($scope, http, $location, user) {
     $scope.username = "";
@@ -18,10 +17,7 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
           } else if (response.status === "Declined"){
             document.getElementById("messageBox").innerHTML = "Wrong username or password.";
             $location.path('login');
-          }          
-        })
-      }
-    };
+          }})}};
     $scope.createAccount = function(){
       if (($scope.username === "")||($scope.password === "")){
         document.getElementById("messageBox").innerHTML = "Please enter details to create your account!";
@@ -38,12 +34,8 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
             document.getElementById("messageBox").innerHTML = "Username '"+$scope.username+"' is already taken";
           } else {
             console.log("nånting gick fel")
-          }
-        })
-      }
-    };
-  }
-]);
+          }});
+      }}}]);
 
 fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location', 'UserService',
   function($scope, http, $location, user) {
@@ -56,7 +48,7 @@ fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location
         $scope.watchlist = res.watchlist;
         $scope.topratedlist = res.topratedlist;
         $scope.username = Cookies.get("UserCookie");
-      })
+      });
       $scope.complete = function(searchword){  
         $scope.hidethis = false;  
         var output = [];
@@ -67,22 +59,15 @@ fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location
               if(movieTitle.toLowerCase().indexOf(searchword.toLowerCase()) >= 0){  
                 output.push(movieTitle);  
                 maxCounter++;
-              }
-            }
-          }  
-        });  
+              }}}});  
         $scope.filterMovie = output;  
       }  
       $scope.redirectToMovie = function(searchword){  
         $location.path('movies/'+searchword)
       }        
-
     } else {
       $location.path('login');
-    }
-  }
-]);
-
+    }}]);
 
 fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routeParams', '$location',
   function($scope, http, $routeParams, $location) {
@@ -90,11 +75,14 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
       $location.path('login')
 
     } else if (Cookies.get("loginStatus") === "logged in"){
+      var socket = io().connect();
+
       $scope.movieName = $routeParams.movie;
+      $scope.user = $routeParams.username;
       http.get('movies/'+$scope.movieName, function(res) {
         $scope.movieObject = res.movieObject;
         $scope.averageRating = res.averageRating;
-
+        $scope.inWatchlist = res.inWatchlist;
 
         $scope.getStars = function(rating) {
           // Get the value
@@ -102,17 +90,20 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
           // Turn value into number/100
           var size = val/10*100;
           return size + '%';
+        }
+      });
+      $scope.updateWatchlist = function() {
+        socket.emit("updateWatchlist", {inWatchlist:$scope.inWatchlist, user:Cookies.get('UserCookie'), movie:$scope.movieName});
+        
+        if($scope.inWatchlist ==='Add to watchlist' ){
+          $scope.inWatchlist = 'Remove from watchlist';
+        } else if($scope.inWatchlist ==='Remove from watchlist'){
+          $scope.inWatchlist = 'Add to watchlist';
+        }
       }
-      })
-
-      
-
-    } else{
+    } else {
       $location.path('login');
-    }
-  }
-]);
-
+    }}]);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -130,11 +121,7 @@ fdbControllers.controller('navigationController', ['$scope',  '$location',
     $scope.logout = function(){
       Cookies.set("loginStatus", "logged out");
       $location.path('login');
-
-    }
-
-  }
-]);
+    }}]);
 
 
 

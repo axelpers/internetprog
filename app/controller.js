@@ -20,16 +20,20 @@ router.post('/login', function(req, res){
   }
 });
 
-
 router.post('/home', function(req, res){
   model.fetchHomescreen(req.body.username, function(searchableMovies, watchlist, topratedlist){
     res.json({searchableMovies: searchableMovies, watchlist: watchlist, topratedlist: topratedlist});
-  })
-})
+  });
+});
 
 router.get('/movies/:movie', function (req, res) {
-  model.getMovieObject(req.params.movie, function(movieObject, averageRating){
-    res.json({movieObject: movieObject, averageRating: averageRating})});
-})
+  model.getMovieObject(req.params.movie, req.headers.cookie.split('=')[1].split(';')[0], function(movieObject, averageRating, watchlist){
+    if (watchlist === undefined || watchlist.length == 0) {
+      res.json({movieObject: movieObject, averageRating: averageRating, inWatchlist: 'Add to watchlist'});
+    } else {
+      res.json({movieObject: movieObject, averageRating: averageRating, inWatchlist: 'Remove from watchlist'});
+    }
+  });
+});
 
 module.exports = router;

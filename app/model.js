@@ -4,7 +4,7 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('project', 'root', 'root',{
   host: 'localhost',
-  port: '3306',
+  port: '8889',
   dialect: 'mysql',
   logging: false
 });
@@ -128,7 +128,7 @@ exports.addNewRating = function(user, movieTitle, newRating){
   
 // }
 
-exports.getMovieObject = function(title, callback){
+exports.getMovieObject = function(title, user, callback){
   // find the movieobject from DB
   db.query("SELECT * FROM MOVIES WHERE title = :title",
   {replacements: { title: title}, type: db.QueryTypes.SELECT})
@@ -137,17 +137,28 @@ exports.getMovieObject = function(title, callback){
     db.query("SELECT AVG(rating) AS avg FROM ratings WHERE title = :title",
     {replacements: { title: title}, type: db.QueryTypes.SELECT})
     .then(averageRating => {
-      callback(movieObject, Math.round(averageRating[0].avg*10)/10);
+      db.query("SELECT * FROM watchlists WHERE title = :title AND username = :user",
+      {replacements: { title: title, user: user}, type: db.QueryTypes.SELECT})
+      .then(watchlist => {
+        callback(movieObject, Math.round(averageRating[0].avg*10)/10, watchlist);
+      });
     });
   });
 }
 
-exports.addToWatchlist = function(user, movieTitle){
-  var Watchlist = db.define('watchlists', {
-    username: {type: Sequelize.STRING},
-    title: {type: Sequelize.STRING}
-  });
-  Watchlist.create({ username: user, title: movieTitle});
+exports.updateWatchlist = function(inWatchlist, user, title){
+  if (inWatchlist === 'Add to watchlist'){
+    var Watchlist = db.define('watchlists', {
+      username: {type: Sequelize.STRING},
+      title: {type: Sequelize.STRING}
+    });
+    Watchlist.create({ username: user, title: title});
+    console.log(title,'added to',user,'watchlist');
+  } else if (inWatchlist === 'Remove from watchlist'){
+    db.query("DELETE FROM watchlists WHERE title = :title AND username = :user",
+    {replacements: { title: title, user: user}, type: db.QueryTypes.DELETE})
+    console.log(title,'removed from',user,'watchlist');
+  }
 }
 
 exports.addRating = function(user, movieTitle, givenRating){
@@ -199,7 +210,8 @@ exports.createTables = function (){
     return Users.bulkCreate([
       {username: 'Axel', password: 'password'},
       {username: 'Viktor', password: 'viktor94'},
-      {username: 'Robban', password: 'robban123'}
+      {username: 'Robban', password: 'robban123'},
+      {username: 'Adriboi', password: 'ynwa'}
     ]);
   });
 
@@ -226,8 +238,11 @@ exports.createTables = function (){
     // Table created
     return Watchlist.bulkCreate([
       {username: 'Axel', title: 'Trettioåriga kriget'},
+      {username: 'Adriboi', title: 'Trettioåriga kriget'},
       {username: 'Viktor', title: 'Nightcrawler'},
       {username: 'Axel', title: 'Wall Street'},
+      {username: 'Adriboi', title: 'Nightcrawler'},
+      {username: 'Adriboi', title: 'They Shall Not Grow Old'},
       {username: 'Axel', title: 'They Shall Not Grow Old'}
     ]);
   });
