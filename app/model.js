@@ -205,7 +205,10 @@ exports.createTables = function (){
       {title: 'Wall Street', genre: 'Drama', year: 1987, streamedBy: 'None', image: 'Wall_Street'},
       {title: 'The Town', genre: 'Crime', year: 2010, streamedBy: 'Netflix', image: 'The_Town'},
       {title: 'Trettioåriga kriget', genre: 'Historia', year: 2018, streamedBy: 'SVT Play', image: 'Trettioariga_Kriget'},
-      {title: 'They Shall Not Grow Old', genre: 'Historia', year: 2018, streamedBy: 'None', image: 'They_Shall_Not_Grow_Old'}
+      {title: 'They Shall Not Grow Old', genre: 'Historia', year: 2018, streamedBy: 'None', image: 'They_Shall_Not_Grow_Old'},
+      {title: 'Perfect Strangers', genre: 'Comedy', year: 2017, streamedBy: 'Netflix, HBO', image: 'Perfect_Strangers'},
+      {title: 'Fanny och Alexander', genre: 'Drama', year: 1982 , streamedBy: 'None', image: 'broken_link'},
+      {title: 'Shawshank Redemption', genre: 'Drama', year: 1994, streamedBy: 'Netflix', image: 'Shawshank_Redemption'}
     ]);
   });
 
@@ -226,6 +229,10 @@ exports.createTables = function (){
     return Rating.bulkCreate([
       {username: 'Axel', title: 'Nightcrawler', rating: '7'},
       {username: 'Viktor', title: 'Wall Street', rating: '10'},
+      {username: 'Viktor', title: 'Perfect Strangers', rating: '7'},
+      {username: 'Axel', title: 'Perfect Strangers', rating: '9'},
+      {username: 'Viktor', title: 'Shawshank Redemption', rating: '10'},
+      {username: 'Robban', title: 'Shawshank Redemption', rating: '9'},
       {username: 'Axel', title: 'Wall Street', rating: '7'},
       {username: 'Axel', title: 'Kung Fu Panda', rating: '5'},
       {username: 'Robban', title: 'Kung Fu Panda', rating: '6'},
