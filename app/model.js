@@ -4,7 +4,7 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('project', 'root', 'root',{
   host: 'localhost',
-  port: '3306',
+  port: '8889',
   dialect: 'mysql',
   logging: false
 });
@@ -33,8 +33,6 @@ var Watchlist = db.define('watchlists', {
   username: {type: Sequelize.STRING},
   title: {type: Sequelize.STRING}
 });
-
-
 
 exports.checkDB = function (){
   db.authenticate()
@@ -108,15 +106,13 @@ exports.addNewRating = function(user, movieTitle, newRating, callback){
       try{
         // Om det är en ny rating av samma person på samma film så uppdaterar vi siffran
         if (data[0].rating !== newRating){
-          
           alreadyRated = true;
           db.query("UPDATE ratings SET rating = :newRating WHERE username = :user AND title = :movieTitle",
           {replacements: {newRating: newRating, user: user, movieTitle: movieTitle}, type: db.QueryTypes.UPDATE })
           .then(dataEmpty =>{
             getAvgRating(movieTitle, callback);
           })
-          //HÄR
-          // Om det är samma rating igen, do nothing
+        // Om det är samma rating igen, do nothing
         } else if (data[0].rating === newRating){
           alreadyRated = true;
         }
@@ -127,10 +123,8 @@ exports.addNewRating = function(user, movieTitle, newRating, callback){
         .then(dataEmpty =>{
           getAvgRating(movieTitle, callback);
         })
-      }
-    });
+      }});
 }
-
 
 function getAvgRating(title, callback){
   db.query("SELECT AVG(rating) AS avg FROM ratings WHERE title = :title",
@@ -157,8 +151,6 @@ exports.getMovieObject = function(title, user, callback){
     });
   });
 }
-
-
 
 exports.updateWatchlist = function(inWatchlist, user, title){
   if (inWatchlist === 'Add to watchlist'){
@@ -200,8 +192,7 @@ exports.createNewUser = function(chosenUsername, chosenPassword, callback){
         callback('Success');
       } else {
         callback('Declined');
-      }
-    });
+      }});
 }
 
 exports.createTables = function (){

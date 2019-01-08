@@ -4,8 +4,8 @@
 <div class="container">
 	<div class="searchPanel" id="searchPanel">
         <h1>Welcome {{username}}!</h1>
-        <input type="text" autocomplete="off" placeholder="Search movies..." name="movieTitle" id="movieTitle" ng-model="movieTitle" ng-keyup="complete(movieTitle)" class="form-control" />  
-            <ul class="list-group" ng-model="hidethis" ng-hide="hidethis">  
+        <input class="form-control" autocomplete="off" placeholder="Search movies..." id="movieTitle" ng-model="movieTitle" ng-keyup="filterFunction(movieTitle)"/>  
+            <ul class="list-group">  
                     <li class="list-group-item" ng-repeat="movieTitle in filterMovie" ng-click="redirectToMovie(movieTitle)"><a style="color:black" href="">{{movieTitle}}</a></li>  
             </ul>
     </div>

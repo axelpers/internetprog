@@ -37,6 +37,7 @@ fdbControllers.controller('loginController', ['$scope', 'HttpService', '$locatio
           }});
       }}}]);
 
+// Controller som styr home-webbsidan
 fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location', 'UserService',
   function($scope, http, $location, user) {
     if ((Cookies.get("loginStatus") === "logged out") || (Cookies.get("loginStatus") === undefined)){
@@ -49,10 +50,14 @@ fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location
         $scope.topratedlist = res.topratedlist;
         $scope.username = Cookies.get("UserCookie");
       });
-      $scope.complete = function(searchword){  
-        $scope.hidethis = false;  
+
+      //Funktion som möjliggör att dropdown föreslår filmer baserat på vad
+      //användaren fyller i
+      $scope.filterFunction = function(searchword){  
         var output = [];
-        var maxCounter = 0;
+        var maxCounter = 0; // Max tio i dropdown list
+        // För varje filmtitel som det går att söka på körs denna
+        // Lägger till i listan output som blir dropdown-listan
         angular.forEach($scope.searchableMovies, function(movieTitle){ 
           if (searchword.length !== 0){
             if (maxCounter < 10){
@@ -60,11 +65,12 @@ fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location
                 output.push(movieTitle);  
                 maxCounter++;
               }}}});  
-        $scope.filterMovie = output;  
+        $scope.filterMovie = output;
       }  
       $scope.redirectToMovie = function(searchword){
         $location.path('movies/'+searchword);
-      }        
+      } 
+    // Om man inte är inloggad (har rätt cookies) ska man kickas ut till loginsidan  
     } else {
       $location.path('login');
     }}]);
@@ -79,15 +85,16 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
 
       $scope.movieName = $routeParams.movie;
       $scope.user = $routeParams.username;
-      var ratinglist = [1,2,3,4,5,6,7,8,9,10]
+      var ratinglist = [1,2,3,4,5,6,7,8,9,10];
       $scope.ratings = ratinglist;
+
       http.get('movies/'+$scope.movieName, function(res) {
         $scope.movieObject = res.movieObject;
         $scope.averageRating = res.averageRating;
         $scope.inWatchlist = res.inWatchlist;
 
+        // Funktion för att fylla ut stjärnorna baserat på rating
         $scope.getStars = function(rating) {
-          // Get the value
           var val = parseFloat(rating);
           // Turn value into number/100
           var size = val/10*100;
