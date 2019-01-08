@@ -81,8 +81,8 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
       $location.path('login')
 
     } else if (Cookies.get("loginStatus") === "logged in"){
+      // Skapar socket
       var socket = io().connect();
-
       $scope.movieName = $routeParams.movie;
       $scope.user = $routeParams.username;
       var ratinglist = [1,2,3,4,5,6,7,8,9,10];
@@ -96,12 +96,13 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
         // Funktion för att fylla ut stjärnorna baserat på rating
         $scope.getStars = function(rating) {
           var val = parseFloat(rating);
-          // Turn value into number/100
           var size = val/10*100;
           return size + '%';
         }
+        // Lägga till att användaren joinar filmrummet
         socket.emit("join", {movieRoom: $scope.movieName});
       });
+
       $scope.updateWatchlist = function() {
         socket.emit("updateWatchlist", {inWatchlist:$scope.inWatchlist, user:Cookies.get('UserCookie'), movie:$scope.movieName});
         if($scope.inWatchlist ==='Add to watchlist' ){
