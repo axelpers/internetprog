@@ -1,5 +1,6 @@
 var fdbControllers = angular.module('fdbControllers', []);
 
+// Controller som används på login-sidan
 fdbControllers.controller('loginController', ['$scope', 'HttpService', '$location', 'UserService',
   function($scope, http, $location, user) {
     $scope.username = "";
@@ -116,14 +117,10 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
           document.getElementById("messageBox").innerHTML = "Please enter a valid rating before pressing the button!";
         } else {
           socket.emit("updateRating", {user:Cookies.get('UserCookie'), movie:$scope.movieName, rating:$scope.selectedRating});
-          
-          // console.log('movies/'+$scope.movieName);
-          // $location.path('movies/'+$scope.movieName);
         }
       }
       socket.on('updateRating', function (data) {
         $scope.$apply(function(){
-          console.log("JA VI BLEV UPPDATERADE");
           $scope.averageRating = data.averageRating;
         });
       });
@@ -131,13 +128,11 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
       $location.path('login');
     }}]);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-fdbControllers.controller('navigationController', ['$scope',  '$location',
+// Controller som används för navigations-baren
+fdbControllers.controller('indexController', ['$scope',  '$location',
   function($scope,  $location) {
     $scope.location = $location.path();
 
-    // // This function should direct the user to the wanted page
     $scope.redirect = function(address) {
       $location.hash("");
       $location.path('/' + address);
@@ -148,8 +143,3 @@ fdbControllers.controller('navigationController', ['$scope',  '$location',
       Cookies.set("loginStatus", "logged out");
       $location.path('login');
     }}]);
-
-
-
-
-
