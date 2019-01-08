@@ -7,8 +7,8 @@ module.exports = function (socket, io) {
 
   // user joins room
   socket.on('join', function (req) {
-    socket.join(req.securityName);
-    console.log('A user joined '+req.securityName+"-tradingroom");
+    socket.join(req.movieRoom);
+    console.log('A user joined '+req.movieRoom+"-movieRoom");
   });
 
   // user gets updated
@@ -17,9 +17,9 @@ module.exports = function (socket, io) {
   });
 
   socket.on('updateRating', function (req) {
-    model.addNewRating(req.user, req.movie, req.rating);
-
-    io.to(req.movie).emit('updateRating', {averagerating: 5});
+    model.addNewRating(req.user, req.movie, req.rating, function(newAvgRating){
+      io.to(req.movie).emit('updateRating', {averageRating: Math.round(newAvgRating[0].avg*10)/10})
+    });
     console.log('New rating (',req.rating,') added for',req.movie);
   });
 

@@ -4,7 +4,7 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('project', 'root', 'root',{
   host: 'localhost',
-  port: '8889',
+  port: '3306',
   dialect: 'mysql',
   logging: false
 });
@@ -99,7 +99,7 @@ exports.fetchHomescreen = function(username, callback){
   });
 }
 
-exports.addNewRating = function(user, movieTitle, newRating){
+exports.addNewRating = function(user, movieTitle, newRating, callback){
   var alreadyRated = false;
   // Checkar först ifall det redan finns en sådan rating
   db.query("SELECT * FROM ratings WHERE username = :user AND title = :movieTitle",
@@ -108,9 +108,14 @@ exports.addNewRating = function(user, movieTitle, newRating){
       try{
         // Om det är en ny rating av samma person på samma film så uppdaterar vi siffran
         if (data[0].rating !== newRating){
+          
           alreadyRated = true;
           db.query("UPDATE ratings SET rating = :newRating WHERE username = :user AND title = :movieTitle",
-          {replacements: {newRating: newRating, user: user, movieTitle: movieTitle}, type: db.QueryTypes.UPDATE });
+          {replacements: {newRating: newRating, user: user, movieTitle: movieTitle}, type: db.QueryTypes.UPDATE })
+          .then(dataEmpty =>{
+            getAvgRating(movieTitle, callback);
+          })
+          //HÄR
           // Om det är samma rating igen, do nothing
         } else if (data[0].rating === newRating){
           alreadyRated = true;
@@ -118,16 +123,25 @@ exports.addNewRating = function(user, movieTitle, newRating){
       } catch(e){}
       // Om user aldrig rateat filmen innan skapas en ny rad i rating-tabellen
       if (alreadyRated === false){
-        Rating.create({username: user, title: movieTitle, rating: newRating});
+        Rating.create({username: user, title: movieTitle, rating: newRating})
+        .then(dataEmpty =>{
+          getAvgRating(movieTitle, callback);
+        })
       }
     });
 }
 
 
+function getAvgRating(title, callback){
+  db.query("SELECT AVG(rating) AS avg FROM ratings WHERE title = :title",
+    {replacements: { title: title}, type: db.QueryTypes.SELECT})
+    .then(averageRating => {
+      callback(averageRating);
+    });
+}
+
 exports.getMovieObject = function(title, user, callback){
   // find the movieobject from DB
-  console.log(user);
-  console.log(title);
   db.query("SELECT * FROM MOVIES WHERE title = :title",
   {replacements: { title: title}, type: db.QueryTypes.SELECT})
   .then(movieObject => {
@@ -144,13 +158,7 @@ exports.getMovieObject = function(title, user, callback){
   });
 }
 
-exports.getAvgRating = function(title, callback){
-  db.query("SELECT AVG(rating) AS avg FROM ratings WHERE title = :title",
-    {replacements: { title: title}, type: db.QueryTypes.SELECT})
-    .then(averageRating => {
-      callback(averageRating);
-    });
-}
+
 
 exports.updateWatchlist = function(inWatchlist, user, title){
   if (inWatchlist === 'Add to watchlist'){

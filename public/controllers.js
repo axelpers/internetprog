@@ -93,6 +93,7 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
           var size = val/10*100;
           return size + '%';
         }
+        socket.emit("join", {movieRoom: $scope.movieName});
       });
       $scope.updateWatchlist = function() {
         socket.emit("updateWatchlist", {inWatchlist:$scope.inWatchlist, user:Cookies.get('UserCookie'), movie:$scope.movieName});

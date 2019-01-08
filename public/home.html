@@ -14,7 +14,7 @@
         <h1>Your personal ToWatchList</h1>
         <div>
 
-            <div ng-repeat="movie in watchlist|limitTo:5" style="display: inline-block" >
+            <div ng-repeat="movie in watchlist" style="display: inline-block" >
                 <div style="text-align: center">
                         <span><a href="" ng-click="redirectToMovie(movie.title)"><img class="thumbnail" src = "/images/{{movie.image}}.jpg" height="250" width="170"></a></span>
                         <p>{{movie.title}}</p>
