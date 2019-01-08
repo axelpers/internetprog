@@ -43,7 +43,7 @@ fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location
       $location.path('login')
     } else if (Cookies.get("loginStatus") === "logged in"){
       http.post('home', {username: Cookies.get("UserCookie")}, function(res){
-        //härifrån vill vi möjliggöra HTML-useage av a) movieWatchList, b) movietoprated och, c) searchableMovies
+        //härifrån  möjliggör vi HTML-useage
         $scope.searchableMovies = res.searchableMovies;
         $scope.watchlist = res.watchlist;
         $scope.topratedlist = res.topratedlist;
