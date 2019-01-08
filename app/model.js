@@ -81,7 +81,6 @@ exports.fetchHomescreen = function(username, callback){
   {replacements: { username: username}, type: db.QueryTypes.SELECT })
   .then(watchlist => {
     var watchlist = watchlist;
-    
     db.query("SELECT title FROM movies",
     {type: db.QueryTypes.SELECT })
     .then(searchableMovies => {
@@ -124,12 +123,11 @@ exports.addNewRating = function(user, movieTitle, newRating){
     });
 }
 
-// updateAvgRating = function(){
-  
-// }
 
 exports.getMovieObject = function(title, user, callback){
   // find the movieobject from DB
+  console.log(user);
+  console.log(title);
   db.query("SELECT * FROM MOVIES WHERE title = :title",
   {replacements: { title: title}, type: db.QueryTypes.SELECT})
   .then(movieObject => {
@@ -144,6 +142,14 @@ exports.getMovieObject = function(title, user, callback){
       });
     });
   });
+}
+
+exports.getAvgRating = function(title, callback){
+  db.query("SELECT AVG(rating) AS avg FROM ratings WHERE title = :title",
+    {replacements: { title: title}, type: db.QueryTypes.SELECT})
+    .then(averageRating => {
+      callback(averageRating);
+    });
 }
 
 exports.updateWatchlist = function(inWatchlist, user, title){

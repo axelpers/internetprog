@@ -62,8 +62,8 @@ fdbControllers.controller('homeController', ['$scope', 'HttpService', '$location
               }}}});  
         $scope.filterMovie = output;  
       }  
-      $scope.redirectToMovie = function(searchword){  
-        $location.path('movies/'+searchword)
+      $scope.redirectToMovie = function(searchword){
+        $location.path('movies/'+searchword);
       }        
     } else {
       $location.path('login');
@@ -79,6 +79,8 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
 
       $scope.movieName = $routeParams.movie;
       $scope.user = $routeParams.username;
+      var ratinglist = [1,2,3,4,5,6,7,8,9,10]
+      $scope.ratings = ratinglist;
       http.get('movies/'+$scope.movieName, function(res) {
         $scope.movieObject = res.movieObject;
         $scope.averageRating = res.averageRating;
@@ -94,13 +96,28 @@ fdbControllers.controller('movieController', ['$scope', 'HttpService', '$routePa
       });
       $scope.updateWatchlist = function() {
         socket.emit("updateWatchlist", {inWatchlist:$scope.inWatchlist, user:Cookies.get('UserCookie'), movie:$scope.movieName});
-        
         if($scope.inWatchlist ==='Add to watchlist' ){
           $scope.inWatchlist = 'Remove from watchlist';
         } else if($scope.inWatchlist ==='Remove from watchlist'){
           $scope.inWatchlist = 'Add to watchlist';
         }
       }
+      $scope.updateRating = function() {
+        if ($scope.selectedRating === undefined || $scope.selectedRating.length == 0) {
+          document.getElementById("messageBox").innerHTML = "Please enter a valid rating before pressing the button!";
+        } else {
+          socket.emit("updateRating", {user:Cookies.get('UserCookie'), movie:$scope.movieName, rating:$scope.selectedRating});
+          
+          // console.log('movies/'+$scope.movieName);
+          // $location.path('movies/'+$scope.movieName);
+        }
+      }
+      socket.on('updateRating', function (data) {
+        $scope.$apply(function(){
+          console.log("JA VI BLEV UPPDATERADE");
+          $scope.averageRating = data.averageRating;
+        });
+      });
     } else {
       $location.path('login');
     }}]);

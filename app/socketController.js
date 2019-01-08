@@ -16,6 +16,13 @@ module.exports = function (socket, io) {
     model.updateWatchlist(req.inWatchlist, req.user, req.movie);
   });
 
+  socket.on('updateRating', function (req) {
+    model.addNewRating(req.user, req.movie, req.rating);
+
+    io.to(req.movie).emit('updateRating', {averagerating: 5});
+    console.log('New rating (',req.rating,') added for',req.movie);
+  });
+
   // user leaves room
   socket.on('leave', function (req) {
     var name = req.name;

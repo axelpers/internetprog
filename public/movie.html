@@ -18,7 +18,7 @@
         <p>Title: {{movieObject.title}}</p>
         <p>Genre: {{movieObject.genre}}</p>
         <p>Year: {{movieObject.year}}</p>
-        <p>Steams: {{movieObject.streamedBy}}</p>
+        <p>Streams: {{movieObject.streamedBy}}</p>
       </div>
 
       <div id="starRating" style="display: flex; width: 190px;">
@@ -28,10 +28,14 @@
         <p style="flex: 1;">{{averageRating}}</p>
       </div>
 
+      <div id="addNewRating" style="text-align: left;">
+        <select ng-model="selectedRating" ng-options="rating for rating in ratings"></select>
+        <button type="button" class="btn" ng-click="updateRating()" id="ratingButton" >Add a new rating</button>
+        <p id="messageBox"></p>
+      </div>
+
       <div id="addOrRemoveButton" style="text-align: left;">
         <!-- Knapp som hanterar WatchList -->
-        <p>{{inWatchlist}}</p>
-        <p>Button</p>
         <button type="button" class="btn" ng-click="updateWatchlist()" id="watchlistButton" >{{inWatchlist}}</button>
       </div>
 

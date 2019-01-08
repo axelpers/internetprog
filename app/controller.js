@@ -27,7 +27,9 @@ router.post('/home', function(req, res){
 });
 
 router.get('/movies/:movie', function (req, res) {
-  model.getMovieObject(req.params.movie, req.headers.cookie.split('=')[1].split(';')[0], function(movieObject, averageRating, watchlist){
+  
+  var username = req.headers.cookie.substring(req.headers.cookie.indexOf("UserCookie=")+11, req.headers.cookie.length).split(";")[0];
+  model.getMovieObject(req.params.movie, username, function(movieObject, averageRating, watchlist){
     if (watchlist === undefined || watchlist.length == 0) {
       res.json({movieObject: movieObject, averageRating: averageRating, inWatchlist: 'Add to watchlist'});
     } else {
